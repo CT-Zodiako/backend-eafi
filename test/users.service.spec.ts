@@ -17,7 +17,7 @@ const storedUser = {
 };
 
 describe('UsersService', () => {
-  const user = { create: jest.fn(), findUnique: jest.fn() };
+  const user = { create: jest.fn(), findUnique: jest.fn(), findMany: jest.fn() };
   let service: UsersService;
 
   beforeEach(() => {
@@ -69,5 +69,15 @@ describe('UsersService', () => {
   it('returns 404 for a missing user', async () => {
     user.findUnique.mockResolvedValue(null);
     await expect(service.findOne(storedUser.id)).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('lists users ordered by creation date without exposing credentials', async () => {
+    user.findMany.mockResolvedValue([storedUser]);
+    const result = await service.findAll();
+    expect(user.findMany).toHaveBeenCalledWith({ orderBy: { createdAt: 'desc' }, select: {
+      id: true, username: true, role: true, createdAt: true, updatedAt: true,
+    } });
+    expect(result).toEqual([{ id: storedUser.id, username: dto.username, role: dto.role, createdAt: storedUser.createdAt, updatedAt: storedUser.updatedAt }]);
+    expect(result[0]).not.toHaveProperty('passwordHash');
   });
 });
