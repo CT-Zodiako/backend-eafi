@@ -8,6 +8,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { CategoriesModule } from './categories/categories.module';
 import { EvaluationPeriodsModule } from './evaluation-periods/evaluation-periods.module';
 import { CategoryEditionsModule } from './category-editions/category-editions.module';
+import { EvaluatorModule } from './evaluator/evaluator.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CategoryEditionsModule } from './category-editions/category-editions.mo
     CategoriesModule,
     EvaluationPeriodsModule,
     CategoryEditionsModule,
+    EvaluatorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
